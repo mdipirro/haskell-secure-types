@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
-module Src.Employee (Employee(Employee)) where
+module Src.Employee (Employee(Employee), firstName, lastName, birthdate,
+salary, email, leader) where
 
 import Data.Aeson
 import Data.Text
@@ -22,4 +23,10 @@ instance FromJSON Employee
 instance ToJSON Employee
 
 increaseSalary :: Employee -> Int -> Employee
-increaseSalary (Employee f l b s e ml) m = Employee f l b (s+m) e ml
+increaseSalary e m =  Employee f l b s em ml
+                      where f  = firstName e
+                            l  = lastName e
+                            b  = birthdate e
+                            s  = salary e + m
+                            em = email e
+                            ml = leader e
