@@ -1,0 +1,4 @@
+[
+  {"salary":1000,"lastName":"Neri","firstName":"Luca","birthdate":"11/08/1994","leader": true, "email": "lneri@email.it"},
+  {"salary":1200,"lastName":"Rossi","firstName":"Mario","birthdate":"29/02/2000","email": "mrossi@email.gb"}
+]
