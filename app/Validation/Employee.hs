@@ -1,6 +1,8 @@
 module Validation.Employee (validate) where
 
 import Text.Regex.Posix
+import Text.Email.Validate (isValid)
+import Data.ByteString.Char8 (pack)
 import Src.Employee
 
 nameRegex   = "^[a-zA-Z =]*$"
@@ -20,8 +22,7 @@ validateName ((Employee f l b s e ml):es) = rf && rl && validateName es
 
 validateEmail :: [Employee] -> Bool
 validateEmail []                            = True
-validateEmail ((Employee f l b s e ml):es)  = re && validateEmail es
-                                              where re = e =~ emailRegex
+validateEmail ((Employee f l b s e ml):es)  = isValid (pack e) && validateEmail es
 
 validate :: [[Employee] -> Bool]
 validate = [validateName, validateDate, validateEmail]
