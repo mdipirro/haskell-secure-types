@@ -16,7 +16,7 @@ readEmployeesFile = ByteString.readFile employeesFile
 
 saveEmployees es = LazyIO.writeFile employeesFile (encodeToLazyText es)
 
-getEmployees :: IO (Unsecure [Employee])
+getEmployees :: IO (Unsecure [Employee] EmployeeV.EmployeeError)
 getEmployees =  do  json <- eitherDecode <$> readEmployeesFile
                     case json of
                       Left err -> return (makeUnsecure [] [])
