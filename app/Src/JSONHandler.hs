@@ -1,9 +1,8 @@
 module Src.JSONHandler (getEmployees, saveEmployees) where
 
 import Data.Aeson
-import qualified Data.ByteString.Lazy as ByteString
-import Data.Text.Lazy.IO as LazyIO
-import Data.Aeson.Text (encodeToLazyText)
+import Data.Aeson.Encode.Pretty
+import qualified Data.ByteString.Lazy as BSL
 import Src.Unsecure
 import Src.Employee
 import qualified Validation.Employee as EmployeeV
@@ -11,10 +10,10 @@ import qualified Validation.Employee as EmployeeV
 employeesFile :: FilePath
 employeesFile = "data/employees.json"
 
-readEmployeesFile :: IO ByteString.ByteString
-readEmployeesFile = ByteString.readFile employeesFile
+readEmployeesFile :: IO BSL.ByteString
+readEmployeesFile = BSL.readFile employeesFile
 
-saveEmployees es = LazyIO.writeFile employeesFile (encodeToLazyText es)
+saveEmployees es = BSL.writeFile employeesFile (encodePretty es)
 
 getEmployees :: IO (Unsecure [Employee] EmployeeV.EmployeeError)
 getEmployees =  do  json <- eitherDecode <$> readEmployeesFile
