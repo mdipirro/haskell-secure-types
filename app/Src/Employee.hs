@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
 module Src.Employee (Employee(Employee), firstName, lastName, birthdate,
-salary, email, leader) where
+salary, email, leader, increaseSalary) where
 
 import Data.Aeson
 import Data.Text
@@ -15,15 +15,25 @@ data Employee = Employee  { firstName  :: String
                           , birthdate  :: String
                           , salary     :: Int
                           , email      :: String
-                          , leader     :: Maybe Bool
+                          , leader     :: Bool
                           }
-                deriving (Show, Generic)
+                deriving (Generic)
 
 instance FromJSON Employee
 instance ToJSON Employee
+instance Show Employee where
+  show e =  "\n\n" ++
+            "Firstname: " ++ (firstName e) ++
+            "\nLastname: " ++ (lastName e) ++
+            "\nBirthdate: " ++ (birthdate e) ++
+            "\nSalary: " ++ show (salary e) ++
+            "\nEmail address: " ++ (email e) ++
+            "\nIs a leader?: " ++ show (leader e) ++
+            "\n\n"
 
-increaseSalary :: Employee -> Int -> Employee
-increaseSalary e m =  Employee f l b s em ml
+
+increaseSalary :: Int -> Employee -> Employee
+increaseSalary m e =  Employee f l b s em ml
                       where f  = firstName e
                             l  = lastName e
                             b  = birthdate e
