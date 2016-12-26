@@ -1,11 +1,11 @@
-module Src.JSONHandler (getEmployees, saveEmployees) where
+module Src.IO.JSONHandler (getEmployees, saveEmployees) where
 
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
 import qualified Data.ByteString.Lazy as BSL
-import Src.Unsecure
-import Src.Employee
-import qualified Validation.Employee as EmployeeV
+import Security.Unsecure
+import Src.Model.Employee
+import qualified Src.Validation.Employee as EmployeeV
 
 employeesFile :: FilePath
 employeesFile = "data/employees.json"

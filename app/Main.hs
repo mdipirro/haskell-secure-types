@@ -1,6 +1,6 @@
-import Src.Employee
-import Src.Unsecure
-import Src.JSONHandler
+import Src.Model.Employee
+import Security.Unsecure
+import Src.IO.JSONHandler
 
 import Data.List (partition)
 

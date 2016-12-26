@@ -1,10 +1,10 @@
-module Validation.Employee (validate, EmployeeError(Birthdate, Name, Email)) where
+module Src.Validation.Employee (validate, EmployeeError(Birthdate, Name, Email)) where
 
 import Text.Regex.Posix
 import Text.Email.Validate (isValid)
 import Data.ByteString.Char8 (pack)
 import Data.List (partition)
-import Src.Employee
+import Src.Model.Employee
 
 data EmployeeError =  Birthdate String | Name String | Email String | Salary String
                       deriving Show

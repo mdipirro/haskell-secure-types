@@ -1,4 +1,4 @@
-module Src.Unsecure (Unsecure, makeUnsecure, validate, transform) where
+module Security.Unsecure (Unsecure, makeUnsecure, validate, transform) where
 
 data Unsecure a b = Unsecure ([a -> Maybe b], a)
 

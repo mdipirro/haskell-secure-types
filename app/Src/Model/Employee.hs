@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
-module Src.Employee (Employee(Employee), firstName, lastName, birthdate,
+module Src.Model.Employee (Employee(Employee), firstName, lastName, birthdate,
 salary, email, leader, increaseSalary) where
 
 import Data.Aeson
@@ -8,7 +8,7 @@ import Data.Text
 import Control.Applicative
 import Control.Monad
 import GHC.Generics
-import Src.Unsecure
+import Security.Unsecure
 
 data Employee = Employee  { firstName  :: String
                           , lastName   :: String
