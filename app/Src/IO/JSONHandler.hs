@@ -18,5 +18,5 @@ saveEmployees es = BSL.writeFile employeesFile (encodePretty es)
 getEmployees :: IO (Unsecure [Employee] EmployeeV.EmployeeError)
 getEmployees =  do  json <- eitherDecode <$> readEmployeesFile
                     case json of
-                      Left err -> return (makeUnsecure [] [])
-                      Right es -> return (makeUnsecure es (EmployeeV.validate))
+                      Left err -> return (upure [] [])
+                      Right es -> return (upure es (EmployeeV.validate))

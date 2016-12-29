@@ -1,6 +1,7 @@
-module Security.Unsecure (Unsecure, makeUnsecure, validate, transform) where
+module Security.Unsecure (Unsecure, upure, validate, umap) where
 
-data Unsecure a b = Unsecure ([a -> Maybe b], a)
+type ValidationFunctions a b = [a -> Maybe b]
+data Unsecure a b = Unsecure (ValidationFunctions a b, a)
 
 validate :: Unsecure a b -> Either a [b]
 validate (Unsecure (fs, v)) = if null errors
@@ -11,8 +12,8 @@ validate (Unsecure (fs, v)) = if null errors
                                                                       Just _  -> True) maybes
                                     errors = map (\(Just m) -> m) justs
 
-transform :: Unsecure a b -> (a -> a) -> Unsecure a b
-transform (Unsecure (fs, v)) f = Unsecure (fs, f v)
+umap :: Unsecure a b -> (a -> a) -> Unsecure a b
+umap (Unsecure (fs, v)) f = Unsecure (fs, f v)
 
-makeUnsecure :: a -> [a -> Maybe b] -> Unsecure a b
-makeUnsecure value fs = Unsecure (fs, value)
+upure :: a -> ValidationFunctions a b -> Unsecure a b
+upure value fs = Unsecure (fs, value)
