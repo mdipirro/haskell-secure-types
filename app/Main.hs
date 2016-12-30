@@ -2,6 +2,7 @@ import Src.Model.Employee
 import Src.IO.JSONHandler
 import Security.Unsecure
 import Security.UserTaint
+import Security.SecureFlow
 
 main :: IO ()
 main = do employees <- getEmployees
@@ -11,3 +12,4 @@ main = do employees <- getEmployees
               t'          = pure (\x y z -> x + y + z) <*> pure 30 <*> t <*> pure 10
           print $ getFromConfig t'
           print $ getFromInt t' 10
+--print $ open proofLow $ ((declassifyWith (pure (\x -> Nothing) :: Sec H (Int -> Maybe Int)) sec) :: Sec L Int)
