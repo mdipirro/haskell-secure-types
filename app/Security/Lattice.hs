@@ -4,6 +4,8 @@ module Security.Lattice (Less, Ticket(Ticket)) where
 
 import GHC.Exts (Constraint)
 
+-- Implementation based on Russo et al., 2008
+
 -- | A predicate on types, to be implemented by the provider of a security level type.
 -- Actually, means "less or equal".
 type family Less sl sh :: Constraint

@@ -1,13 +1,15 @@
-module Security.SecureFlow where
+module Security.SecureFlow (SecureFlow, open, up, declassifyWith) where
 
 import Control.Monad.Identity
 import Control.Applicative
+
+-- Implementation based on Russo et al., 2008
 
 import Security.Lattice
 
 -- | SecureFlow: the Identity monad tagged with a proposition allowing to access
 -- its value.
-data SecureFlow s a = Allowed {value :: a} | Denied
+data SecureFlow s a = Allowed a | Denied
 
 instance Functor (SecureFlow s) where
     fmap f (Allowed x)  = Allowed $ f x
