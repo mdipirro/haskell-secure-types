@@ -1,4 +1,4 @@
-module Security.SecureFlow (SecureFlow, open, up, declassifyWith) where
+module Security.SecureFlow (SecureFlow, Hatch, open, up, declassifyWith) where
 
 import Control.Monad.Identity
 import Control.Applicative
@@ -10,6 +10,7 @@ import Security.Lattice
 -- | SecureFlow: the Identity monad tagged with a proposition allowing to access
 -- its value.
 data SecureFlow s a = Allowed a | Denied
+type Hatch s a b = SecureFlow s (a -> Maybe b)
 
 instance Functor (SecureFlow s) where
     fmap f (Allowed x)  = Allowed $ f x
@@ -35,21 +36,16 @@ open :: Ticket s -> SecureFlow s a -> Maybe a
 open Ticket (Allowed a) = Just a
 open Ticket Denied      = Nothing
 
-up :: Less s s' => SecureFlow s a -> SecureFlow s' a
+up :: LEQ s s' => SecureFlow s a -> SecureFlow s' a
 up (Allowed a)  = Allowed a
 up Denied       = Denied
-
--- only for trusted code!
-reveal :: SecureFlow s a -> Maybe a
-reveal (Allowed a) = Just a
-reveal Denied      = Nothing
 
 -- | Declassification
 unsafeCoerceLevels :: SecureFlow s a -> SecureFlow s' a
 unsafeCoerceLevels (Allowed x)  = Allowed x
 unsafeCoerceLevels Denied       = Denied
 
-declassifyWith :: (Less s k, Less s' s) => SecureFlow k (a -> Maybe b) -> SecureFlow s a -> SecureFlow s' b
+declassifyWith :: (LEQ s k, LEQ s' s) => Hatch k a b -> SecureFlow s a -> SecureFlow s' b
 declassifyWith (Allowed f) s = unsafeCoerceLevels $ do  x <- s
                                                         case f x of
                                                           Just x' -> return x'
