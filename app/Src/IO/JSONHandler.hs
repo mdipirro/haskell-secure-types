@@ -20,9 +20,6 @@ storesFile = "data/stores.json"
 credentialsFile :: FilePath
 credentialsFile = "data/credentials.json"
 
---readEmployeesFile :: IO BSL.ByteString
---readEmployeesFile = BSL.readFile employeesFile
-
 saveEmployees es = BSL.writeFile employeesFile (encodePretty es)
 
 getEmployees :: IO (Unsecure [Employee] EmployeeV.EmployeeError)
