@@ -6,6 +6,7 @@ import Security.Unsecure
 import Security.UserTaint
 import Security.SecureFlow
 import Security.Lattice
+import Security.SecureComputation
 --import Security.MonadicFlow
 
 data L = L
@@ -32,6 +33,9 @@ main = do employees <- getEmployees
               t           = pure (\x y -> x + y) <*> pure 10 <*> pure 20 :: Taint Int
               t'          = pure (\x y z -> x + y + z) <*> pure 30 <*> t <*> pure 10
               sec         = pure 10 :: SecureFlow H Int
+              comp        = spure 20 :: SecureComputation P Int
+              fun         = spure (\x->x+1) :: SecureComputation P (Int -> Int)
           print $ getFromConfig t'
           print $ getFromInt t' 10
-          print $ open proofLow $ ((declassifyWith sum10 sec) :: SecureFlow L Int)
+          print $ Security.SecureFlow.open proofLow $ ((declassifyWith sum10 sec) :: SecureFlow L Int)
+          print $ Security.SecureComputation.open $ sapp fun comp
