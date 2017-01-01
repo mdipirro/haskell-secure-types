@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Security.ThreeLevels (Low, Medium, High, low, medium, high) where
+module Security.ThreeLevels (Low, Medium, High, low, medium) where
 
 import Security.Lattice
 
@@ -10,6 +10,7 @@ data High   = H
 
 type instance (LEQ Low Low) = ()
 type instance (LEQ Low Medium) = ()
+type instance (LEQ Low High) = ()
 type instance (LEQ Medium Medium) = ()
 type instance (LEQ Medium High) = ()
 type instance (LEQ High High) = ()
