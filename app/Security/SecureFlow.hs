@@ -31,8 +31,7 @@ instance Monad (SecureFlow s) where
 -- is possible for everybody. A SecureFlow value can be unwrapped given a proof that
 -- accessing the security level of it was allowed.
 
--- | Needs to be strict in `s` to disallow passing @undefined@ as proof for @s@.
-open :: Ticket s -> SecureFlow s a -> Maybe a
+open :: LEQ s s' => Ticket s' -> SecureFlow s a -> Maybe a
 open Ticket (Allowed a) = Just a
 open Ticket Denied      = Nothing
 
@@ -41,7 +40,7 @@ up (Allowed a)  = Allowed a
 up Denied       = Denied
 
 -- | Declassification
-unsafeCoerceLevels :: SecureFlow s a -> SecureFlow s' a
+unsafeCoerceLevels :: LEQ s' s => SecureFlow s a -> SecureFlow s' a
 unsafeCoerceLevels (Allowed x)  = Allowed x
 unsafeCoerceLevels Denied       = Denied
 
