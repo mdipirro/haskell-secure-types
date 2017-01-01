@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Src.Model.Store (Store(..), productName, price, stocks) where
+module Src.Model.Store (Store(..)) where
 
 import Data.Aeson
 import GHC.Generics

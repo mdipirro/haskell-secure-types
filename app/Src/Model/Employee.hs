@@ -1,7 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Src.Model.Employee (Employee(Employee), firstName, lastName, birthdate,
-salary, email, leader, increaseSalary) where
+module Src.Model.Employee (Employee(..), increaseSalary) where
 
 import Data.Aeson
 import GHC.Generics
