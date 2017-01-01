@@ -1,41 +1,32 @@
-{-# LANGUAGE TypeFamilies #-}
-
 import Src.Model.Employee
+import Src.Model.Credential
 import Src.IO.JSONHandler
-import Security.Unsecure
-import Security.UserTaint
 import Security.SecureFlow
-import Security.Lattice
-import Security.SecureComputation
---import Security.MonadicFlow
+import Security.ThreeLevels
+import Security.Unsecure
 
-data L = L
-data H = H
+login :: String -> String -> Hatch High [Credential] Bool
+login e p = pure (\cs -> Just $ elem (Credential e p) cs)
 
-type instance (LEQ L L) = ()
-type instance (LEQ L H) = ()
-type instance (LEQ H H) = ()
-
-proofLow :: Ticket L
-proofLow = Ticket
-
-proofHigh :: Ticket H
-proofHigh = Ticket
-
-sum10 :: Hatch H Int Int
-sum10 = pure (\x -> Just $ x+10)
-
+askForLogin :: SecureFlow High [Credential] -> IO String
+askForLogin cs = do putStr "Email: "
+                    e <- getLine
+                    putStr "Password: "
+                    p <- getLine
+                    let check = (declassifyWith (login e p) cs) :: SecureFlow Medium Bool
+                        success = open medium check
+                    case success of Just True  -> return e
+                                    _          -> do  putStr "Incorrect credentials, please try again\n"
+                                                      askForLogin cs
 
 main :: IO ()
-main = do employees <- getEmployees
-          let employees'  = umap employees (\es -> map (increaseSalary 200) es)
-              e           = validate employees
-              t           = pure (\x y -> x + y) <*> pure 10 <*> pure 20 :: Taint Int
-              t'          = pure (\x y z -> x + y + z) <*> pure 30 <*> t <*> pure 10
-              sec         = pure 10 :: SecureFlow H Int
-              comp        = spure 20 :: SecureComputation P Int
-              fun         = spure (\x->x+1) :: SecureComputation P (Int -> Int)
-          print $ getFromConfig t'
-          print $ getFromInt t' 10
-          print $ Security.SecureFlow.open proofLow $ ((declassifyWith sum10 sec) :: SecureFlow L Int)
-          print $ Security.SecureComputation.open $ sapp fun comp
+main = do cs <-getCredentials
+          e <- askForLogin cs
+          putStr $ "Welcome, " ++ e ++ "\n"
+          putStr $ "What do you want to do? \n"
+          putStr $ "1) See employees \n"
+          c <- getLine
+          case c of "1" -> do ue <- getEmployees
+                              case validate ue of
+                                Left es     -> print es
+                                Right [err] -> print $ "There are some inconsistences " ++ (show err)
