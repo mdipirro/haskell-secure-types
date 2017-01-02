@@ -18,6 +18,6 @@ getNat = do n <- getLine
                                           else Just NegativeNumber)
                                 ]
 
-getUnpureNat :: IO (SecureComputation P String)
+getUnpureNat :: IO (SecureComputation T String)
 getUnpureNat = do n <- getLine
                   return $ spure n

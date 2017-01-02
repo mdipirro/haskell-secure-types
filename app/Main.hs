@@ -39,12 +39,19 @@ incSalary i t (se:ses) =  if t == ((\(Just a) -> a) $ open medium $ SE.email se)
                           then (SE.increaseSalary i se):ses
                           else incSalary i t ses
 
-incPrice :: SC.SecureComputation SC.P String -> String
+{-incPrice :: SC.SecureComputation SC.T String -> String
             -> SC.SecureComputation SC.P [Store] -> SC.SecureComputation SC.P [Store]
 incPrice i n sc = SC.sapp (SC.spure $ (\ss -> incPrice' i n ss)) sc
                   where incPrice' i n (s:ss) =  if n == productName s
                                                 then (increasePrice (read . SC.open $ i) s):ss
-                                                else s:(incPrice' i n ss)
+                                                else s:(incPrice' i n ss)-}
+
+storesOperation :: Read a => SC.SecureComputation SC.T String -> String -> (a -> Store -> Store)
+                    -> SC.SecureComputation SC.P [Store] -> SC.SecureComputation SC.P [Store]
+storesOperation m n f sc =  SC.sapp (SC.spure $ (\ss -> op m n ss)) sc
+                            where op i n (s:ss) = if n == productName s
+                                                  then (f (read . SC.open $ m) s):ss
+                                                  else s:(op m n ss)
 
 
 menu :: [SE.SEmployee] -> SC.SecureComputation SC.P [Store] -> IO ()
@@ -76,7 +83,15 @@ menu se ss = do putStr $ "\n\n0) Exit \n"
                                     p <- getLine
                                     putStr $ "Enter the increase: "
                                     i <- getUnpureNat
-                                    let ss' = incPrice i p ss
+                                    --let ss' = incPrice i p ss
+                                    let ss' = storesOperation i p (increasePrice) ss
+                                    print $ SC.open ss'
+                                    menu se ss'
+                          "5" -> do putStr $ "Enter the product name: "
+                                    p <- getLine
+                                    putStr $ "Enter the increase: "
+                                    i <- getUnpureNat
+                                    let ss' = storesOperation i p (increaseStocks) ss
                                     print $ SC.open ss'
                                     menu se ss'
 
