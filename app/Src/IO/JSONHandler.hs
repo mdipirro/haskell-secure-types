@@ -1,4 +1,5 @@
-module Src.IO.JSONHandler (getEmployees, saveEmployees, getCredentials) where
+module Src.IO.JSONHandler (getEmployees, saveEmployees, getCredentials,
+getSecureEmployees) where
 
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
@@ -7,6 +8,7 @@ import Security.Unsecure
 import Security.SecureFlow
 import Security.ThreeLevels
 import Src.Model.Employee
+import Src.Model.SecureEmployee
 import Src.Model.Credential
 import Src.Model.Store
 import qualified Src.Validation.Employee as EmployeeV
@@ -31,3 +33,8 @@ getCredentials :: IO (SecureFlow High [Credential])
 getCredentials = do json <- eitherDecode <$> BSL.readFile credentialsFile
                     case json of  Left err -> return (fail "")
                                   Right cs -> return (pure cs)
+
+getSecureEmployees :: IO [SEmployee]
+getSecureEmployees = do json <- eitherDecode <$> BSL.readFile employeesFile
+                        case json of  Left err -> return []
+                                      Right es -> return $ map fromEmployee es
