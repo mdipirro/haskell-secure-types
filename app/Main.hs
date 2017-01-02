@@ -1,9 +1,11 @@
 import Src.Model.Employee
+import Src.Model.Store
 import qualified Src.Model.SecureEmployee as SE
 import Src.Model.Credential
 import Src.IO.JSONHandler
 import Src.IO.TestIOFunctions
 import Security.SecureFlow
+import qualified Security.SecureComputation as SC
 import Security.ThreeLevels
 import Security.Unsecure
 import Data.List
@@ -22,21 +24,6 @@ askForLogin cs = do putStr "Email: "
                                     _          -> do  putStr "Incorrect credentials, please try again\n"
                                                       askForLogin cs
 
-hatchSalary :: Int -> Hatch High Int Int
-hatchSalary i = pure (\s -> Just $ s+i)
-
-incSalary :: Int -> String -> [SE.SEmployee] -> [SE.SEmployee]
-incSalary _ _ []       =  []
-incSalary i t (se:ses) =  if t == ((\(Just a) -> a) $ open medium $ SE.email se)
-                          then (SE.SEmployee f l b s e le):ses
-                          else incSalary i t ses
-                          where f = SE.firstName se
-                                l = SE.lastName se
-                                b = SE.birthdate se
-                                s = (declassifyWith (hatchSalary i) (SE.salary se)) :: SecureFlow High Int
-                                e = SE.email se
-                                le = SE.leader se
-
 showSalary :: Hatch High Int Int
 showSalary = pure (\s -> Just s)
 
@@ -46,31 +33,59 @@ showEmployeeSalary n (se:ses) = do  if n == ((\(Just a) -> a) $ open medium $ SE
                                     then return $ open low $ ((declassifyWith showSalary (SE.salary se)) :: SecureFlow Low Int)
                                     else showEmployeeSalary n ses
 
-menu :: [SE.SEmployee] -> IO ()
-menu se = do  putStr $ "0) Exit \n"
-              putStr $ "1) See employees' public details \n"
-              putStr $ "2) Increase an employee's salary \n"
-              putStr $ "What do you want to do? "
-              c <- getLine
-              case c of "0" ->  return ()
-                        "1" ->  do  putStr $ intercalate "\n\n" $ map (SE.viewPublicDetails medium) se
-                                    putStr "\n\n"
-                                    menu se
-                        "2" ->  do  putStr $ "Enter the employee's email address: "
-                                    t <- getLine
+incSalary :: Int -> String -> [SE.SEmployee] -> [SE.SEmployee]
+incSalary _ _ []       =  []
+incSalary i t (se:ses) =  if t == ((\(Just a) -> a) $ open medium $ SE.email se)
+                          then (SE.increaseSalary i se):ses
+                          else incSalary i t ses
+
+incPrice :: SC.SecureComputation SC.P String -> String
+            -> SC.SecureComputation SC.P [Store] -> SC.SecureComputation SC.P [Store]
+incPrice i n sc = SC.sapp (SC.spure $ (\ss -> incPrice' i n ss)) sc
+                  where incPrice' i n (s:ss) =  if n == productName s
+                                                then (increasePrice (read . SC.open $ i) s):ss
+                                                else s:(incPrice' i n ss)
+
+
+menu :: [SE.SEmployee] -> SC.SecureComputation SC.P [Store] -> IO ()
+menu se ss = do putStr $ "\n\n0) Exit \n"
+                putStr $ "1) See employees' public details \n"
+                putStr $ "2) Increase an employee's salary \n"
+                putStr $ "3) See stores status \n"
+                putStr $ "4) Increase price \n"
+                putStr $ "5) Increase stocks \n"
+                putStr $ "What do you want to do? "
+                c <- getLine
+                case c of "0" ->  return ()
+                          "1" ->  do  putStr $ intercalate "\n\n" $ map (SE.viewPublicDetails medium) se
+                                      putStr "\n\n"
+                                      menu se ss
+                          "2" ->  do  putStr $ "Enter the employee's email address: "
+                                      t <- getLine
+                                      putStr $ "Enter the increase: "
+                                      i <- getNat
+                                      case validate i of  Left vi ->  do  let se' = incSalary (read vi) t se
+                                                                          s <- showEmployeeSalary t se'
+                                                                          putStr $ "The new salary is " ++ (show s)
+                                                                          menu se' ss
+                                                          Right e   -> do print e
+                                                                          menu se ss
+                          "3" -> do print $ SC.open ss
+                                    menu se ss
+                          "4" -> do putStr $ "Enter the product name: "
+                                    p <- getLine
                                     putStr $ "Enter the increase: "
-                                    i <- getNat
-                                    case validate i of  Left vi ->  do  let se' = incSalary vi t se
-                                                                        s <- showEmployeeSalary t se'
-                                                                        putStr $ "The new salary is " ++ (show s)
-                                                                        menu se'
-                                                        Right e   -> do print e
-                                                                        menu se
+                                    i <- getUnpureNat
+                                    let ss' = incPrice i p ss
+                                    print $ SC.open ss'
+                                    menu se ss'
+
 
 
 main :: IO ()
 main = do {-cs <-getCredentials
           e <- askForLogin cs-}
           se <- getSecureEmployees
+          ss <- getStores
           --putStr $ "Welcome, " ++ e ++ "\n"
-          menu se
+          menu se ss
