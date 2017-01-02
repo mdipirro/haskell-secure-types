@@ -1,4 +1,5 @@
-module Src.Model.SecureEmployee(SEmployee(..), viewPublicDetails, fromEmployee) where
+module Src.Model.SecureEmployee(SEmployee, viewPublicDetails, fromEmployee,
+firstName, lastName, birthdate, salary, email, leader, increaseSalary) where
 
 import qualified Src.Model.Employee as E
 import Security.SecureFlow
@@ -28,3 +29,12 @@ viewPublicDetails Ticket se = "Firstname: " ++ (dejust $ firstName se) ++
                               "\nEmail address: " ++ (dejust $ email se) ++
                               "\nIs a leader?: " ++ show (dejust $ leader se)
                               where dejust e = (\(Just a) -> a) $ open medium e
+
+increaseSalary :: Int -> SEmployee -> SEmployee
+increaseSalary i se = SEmployee f l b s e le
+                      where f = firstName se
+                            l = lastName se
+                            b = birthdate se
+                            s = fmap (\s -> s+i) $ salary se
+                            e = email se
+                            le = leader se
