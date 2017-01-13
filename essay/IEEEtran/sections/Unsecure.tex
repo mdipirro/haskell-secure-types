@@ -1,0 +1,20 @@
+\section{The Unsecure module}\label{sec:usecure}
+The \texttt{Unsecure} module makes sure that an input value will be validated before its use. Below is its definition.
+\begin{lstlisting}[frame=single]
+type ValidationFunctions a b
+  = [a -> Maybe b]
+data Unsecure a b =  
+  Unsecure (ValidationFunctions a b, a)
+\end{lstlisting}
+Here, \texttt{a} and \texttt{b} represent \textit{every possible} type, as usual in Haskell type definitions. The former is the input type and the latter is an \textit{error} type. Using an error type is necessary, because the validation could fail. If it fails, a list of errors is returned. Following the Haskell error mechanism, every error in that list is represented as a constructor of the type \texttt{b}. 
+
+%\begin{prooftree}
+%	\AxiomC{}
+%	\RightLabel{UPURE}
+%	\UnaryInfC{(a, ValidationFunctions a b) $\rightarrow$ Unsecure a b}
+%\end{prooftree}
+%\begin{prooftree}
+%	\AxiomC{a $rightarrow$ a'}
+%	\RightLabel{UMAP}
+%	\BinaryInfC{Unsecure a b $\rightarrow$ Unsecure a b}
+%\end{prooftree}
