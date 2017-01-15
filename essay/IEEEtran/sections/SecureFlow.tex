@@ -1,1 +1,6 @@
 \section{The SecureFlow module}\label{sec:flow}
+Software usually manipulates information with different security policies. Password, for example, are sensitive data, while names or birth dates are not. During the execution sometimes we want to be sure that sensitive information don't flow to insecure or public output channels. On the other hand, we have to perform some operations on these reserved data. As an example consider a login procedure. After a successful login the user is sure that the provided password is correct. \\
+The goal with \texttt{SecureFlow} is to ensure information flow security and declassification policies at compile-time, so that if a code is correctly compiled there are no security violations.
+
+\subsection{Security lattice}
+\texttt{SecureFlow} is based on a lattice structure, first introduced by \citeauthor{denning1976lattice} \cite{denning1976lattice}, and represented in this library as a type family.
