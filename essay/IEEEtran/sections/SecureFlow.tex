@@ -1,6 +1,40 @@
 \section{The SecureFlow module}\label{sec:flow}
-Software usually manipulates information with different security policies. Password, for example, are sensitive data, while names or birth dates are not. During the execution sometimes we want to be sure that sensitive information don't flow to insecure or public output channels. On the other hand, we have to perform some operations on these reserved data. As an example consider a login procedure. After a successful login the user is sure that the provided password is correct. \\
-The goal with \texttt{SecureFlow} is to ensure information flow security and declassification policies at compile-time, so that if a code is correctly compiled there are no security violations.
+Software usually manipulates information with different security policies. As an example, passwords are sensitive data, while names or birth dates are not. During execution sometimes we want to be sure that sensitive information don't flow to insecure or public output channels. On the other hand, usually we perform some operations on these reserved data. After a successful login, for example, the user is sure that the provided password is correct. \\
+The goal with \texttt{SecureFlow} is to ensure information flow security and declassification policies at compile-time, so that if a code is correctly compiled there are no certain security violations. \\
+\citeauthor{russo2008library} \cite{russo2008library} have developed a monadic approach, but their intensive use of the \texttt{IO} monad makes their solution not fully static.
 
 \subsection{Security lattice}
-\texttt{SecureFlow} is based on a lattice structure, first introduced by \citeauthor{denning1976lattice} \cite{denning1976lattice}, and represented in this library as a type family.
+\texttt{SecureFlow} is based on a lattice structure, first introduced by \citeauthor{denning1976lattice} \cite{denning1976lattice}, and represented in this library as a type family \cite{kiselyov2010fun}. This approach is based on a ticketing system. Listing~\ref{lst:lattice} shows the \texttt{Lattice} module. 
+\begin{lstlisting}[caption={The Lattice module}, label={lst:lattice}, breaklines=true]
+module Security.Lattice (LEQ, Ticket(Ticket)) where
+
+type family LEQ sl sh :: Constraint
+data Ticket s = Ticket
+\end{lstlisting}
+Basically, \texttt{LEQ}, as a type family, represents a partial function at the type level. Applying the function to parameters (called \textit{type indices}) yields a type. Type families permit a program to compute what data constructors it will operate on, rather than having them fixed statically. Here LEQ means \textit{Less or Equal}. Trusted programmers are asked to instantiate it specifying the real security lattice. A three level lattice is shown in Listing~\ref{lst:3lvs}.
+\begin{lstlisting}[caption={Three levels lattice}, label={lst:3lvs}, breaklines=true]
+module ThreeLevels (Low, Medium, High, low, medium) where
+
+data Low    = L
+data Medium = M
+data High   = H
+
+type instance (LEQ Low Low)       = ()
+type instance (LEQ Low Medium)    = ()
+type instance (LEQ Low High)      = ()
+type instance (LEQ Medium Medium) = ()
+type instance (LEQ Medium High)   = ()
+type instance (LEQ High High)     = ()
+
+low :: Ticket Low
+low = Ticket
+
+medium :: Ticket Medium
+medium = Ticket
+
+high :: Ticket High
+high = Ticket
+\end{lstlisting}
+Here, \texttt{Low}, \texttt{Medium} and \texttt{High} are singleton types (\cite{stone2000singleton}, \cite{pierce2005advanced}). Basically, singleton types are those which have only one value. Thus, the value of a singleton type has a unique type representing the value. A type theory that allows types to be parameterised by values (like the one adopted by Haskell) can use singleton types to let types depend on singleton values. The sequence of \texttt{type instance} allows programmers to specify the relations among \texttt{Low}, \texttt{Medium} and \texttt{High}. Listing~\ref{lst:3lvs} shows also a ticketing system instance. Tickets are generally used as a level proof. Note that the \texttt{high} ticket is not exported, so that one may get access to high secure data only according to the declassification policies. \\
+
+\subsection{Type rules}
