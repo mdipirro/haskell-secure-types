@@ -1,0 +1,36 @@
+\begin{proposition}
+\texttt{SecureFlow}, as defined, is a functor.
+\end{proposition}
+\begin{proof}
+We are to prove the two functor laws.
+\begin{enumerate}
+	\item \textbf{Identity}: \texttt{fmap id = id}, where \texttt{id} is the identity function.
+	\begin{lstlisting}
+fmap id (Allowed a) = Allowed (id a) =
+= Allowed a
+
+fmap id Denied = Denied
+	\end{lstlisting}
+	Hence \texttt{fmap id = id}, as stated.
+	\item \textbf{Composition}:\\ \texttt{fmap (f . g) F = fmap f (fmap g F)}
+	\begin{enumerate}
+		\item \texttt{F = Allowed a}:
+		\begin{lstlisting}
+fmap (f . g) (Allowed a) = 
+= Allowed (f (g a))
+
+fmap f (fmap g (Allowed a)) =
+= fmap f (Allowed (g a)) =
+= Allowed (f (g a))
+		\end{lstlisting}
+		\item \texttt{F = Denied}:
+		\begin{lstlisting}
+fmap (f . g) Denied = Denied 
+
+fmap f (fmap g Denied) =
+= fmap f Denied = Denied
+		\end{lstlisting}
+	\end{enumerate}
+\end{enumerate}
+\texttt{SecureFlow} satisfies the two functor laws, hence it is a functor.
+\end{proof}

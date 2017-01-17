@@ -1,5 +1,5 @@
 \section{The SecureFlow module}\label{sec:flow}
-Software usually manipulates information with different security policies. As an example, passwords are sensitive data, while names or birth dates are not. During execution sometimes we want to be sure that sensitive information don't flow to insecure or public output channels. On the other hand, usually we perform some operations on these reserved data. After a successful login, for example, the user is sure that the provided password is correct. \\
+Software usually manipulates information with different security policies. For example, passwords are sensitive data, while names or birth dates are not. During execution sometimes we want to be sure sensitive information don't flow to insecure or public output channels. On the other hand, usually we perform some operations on these reserved data. After a successful login the user is sure the provided password is correct. \\
 The goal with \texttt{SecureFlow} is to ensure information flow security and declassification policies at compile-time, so that if a code is correctly compiled there are no certain security violations. \\
 \citeauthor{russo2008library} \cite{russo2008library} have developed a monadic approach, but their intensive use of the \texttt{IO} monad makes their solution not fully static.
 
@@ -11,7 +11,7 @@ module Security.Lattice (LEQ, Ticket(Ticket)) where
 type family LEQ sl sh :: Constraint
 data Ticket s = Ticket
 \end{lstlisting}
-Basically, \texttt{LEQ}, as a type family, represents a partial function at the type level. Applying the function to parameters (called \textit{type indices}) yields a type. Type families permit a program to compute what data constructors it will operate on, rather than having them fixed statically. Here LEQ means \textit{Less or Equal}. Trusted programmers are asked to instantiate it specifying the real security lattice. A three level lattice is shown in Listing~\ref{lst:3lvs}.
+Basically, \texttt{LEQ}, as a type family, represents a partial function at the type level. Applying the function to parameters (called \textit{type indices}) yields a type. Type families permit a program to compute what data constructors it will operate on, rather than having them fixed statically. Here, LEQ means \textit{Less or Equal}. Trusted programmers are asked to instantiate it specifying the real security lattice. A three level lattice example is shown in Listing~\ref{lst:3lvs}.
 \begin{lstlisting}[caption={Three levels lattice}, label={lst:3lvs}, breaklines=true]
 module ThreeLevels (Low, Medium, High, low, medium) where
 
@@ -37,4 +37,34 @@ high = Ticket
 \end{lstlisting}
 Here, \texttt{Low}, \texttt{Medium} and \texttt{High} are singleton types (\cite{stone2000singleton}, \cite{pierce2005advanced}). Basically, singleton types are those which have only one value. Thus, the value of a singleton type has a unique type representing the value. A type theory that allows types to be parameterised by values (like the one adopted by Haskell) can use singleton types to let types depend on singleton values. The sequence of \texttt{type instance} allows programmers to specify the relations among \texttt{Low}, \texttt{Medium} and \texttt{High}. Listing~\ref{lst:3lvs} shows also a ticketing system instance. Tickets are generally used as a level proof. Note that the \texttt{high} ticket is not exported, so that one may get access to high secure data only according to the declassification policies. \\
 
-\subsection{Type rules}
+\subsection{SecureFlow Implementation}
+Basically, \texttt{SecureFlow} is just an identity monad instance tagged with a proposition allowing access to its value. Actually, that proposition is just a ticket. Listing~\ref{lst:secureflow} shows the module.
+\begin{lstlisting}[caption={SecureFlow monad}, label={lst:secureflow}, breaklines=true]
+data SecureFlow s a = Allowed a | Denied
+type Hatch s a b = SecureFlow s (a -> Maybe b)
+
+instance Functor (SecureFlow s) where
+  fmap f (Allowed x)  = Allowed $ f x
+  fmap _ Denied       = Denied
+
+instance Applicative (SecureFlow s) where
+  pure x                      = Allowed x
+  (Allowed f) <*> (Allowed x) = Allowed $ f x
+  _ <*> _                     = Denied
+
+instance Monad (SecureFlow s) where
+  return            = pure
+  (Allowed a) >>= f = f a
+  Denied >>= _      = Denied
+  fail _            = Denied
+  
+open :: LEQ s s' => Ticket s' -> SecureFlow s a -> Maybe a
+
+up :: LEQ s s' => SecureFlow s a -> SecureFlow s' a
+
+declassifyWith :: (LEQ s k, LEQ s' s) => Hatch k a b -> SecureFlow s a -> SecureFlow s' b
+\end{lstlisting}
+%\input{sections/SecureFlow_proofs/functor}
+%\input{sections/SecureFlow_proofs/applicative}
+\input{sections/SecureFlow_proofs/monad}
+\texttt{SecureFlow} is, obviously, also a functor and an applicative. The proof is largely similar to the last one, so it is omitted.

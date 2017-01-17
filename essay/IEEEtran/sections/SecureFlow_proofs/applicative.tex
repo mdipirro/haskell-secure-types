@@ -1,0 +1,12 @@
+\begin{proposition}
+\texttt{SecureFlow}, as defined, is an applicative functor.
+\end{proposition}
+\begin{proof}
+We are to prove the four applicative laws.
+\begin{enumerate}
+	\item \textbf{Identity}: \texttt{pure id <*> v = v}
+	\item \textbf{Homomorphism}: \\ \texttt{pure f <*> pure x = pure (f x)}
+	\item \textbf{Interchange}: \\ \texttt{u <*> pure y = pure (\$ y) <*> u}
+	\item \textbf{Composition}: \texttt{pure (.) <*> u <*> v <*> w = u <*> (v <*> w)}
+\end{enumerate}
+\end{proof}

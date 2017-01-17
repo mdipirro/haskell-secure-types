@@ -1,0 +1,47 @@
+\begin{proposition}
+\texttt{SecureFlow}, as defined, is a monad.
+\end{proposition}
+\begin{proof}
+We are to prove the three monad laws. 
+\begin{enumerate}
+	\item \textbf{Left identity}: \texttt{return a >>= f = f a}
+		\begin{lstlisting}
+(return a >>= f) = (pure a >>= f) = 
+= ((Allowed a) >>= f) = f a
+		\end{lstlisting}
+	
+	\item \textbf{Right identity}: \texttt{m >>= return = m}
+		\begin{enumerate}
+			\item \texttt{m = Allowed a}:
+			\begin{lstlisting}
+((Allowed a) >>= return) = 
+= (return a) = (pure a) = 
+= (Allowed a) = m
+			\end{lstlisting}
+			\item \texttt{m = Denied}:
+			\begin{lstlisting}
+(Denied >>= return) = Denied = m
+			\end{lstlisting}
+		\end{enumerate}
+	
+	\item \textbf{Associativity}: \texttt{(m >>= f) >>= g = m >>= ($\backslash$x -> f x >>= g)} 
+		\begin{enumerate}
+			\item \texttt{m = Allowed a}:
+			\begin{lstlisting}
+(((Allowed a) >>= f) >>= g) = 
+= ((f a) >>= g) = (g (f a))
+
+(Allowed a >>= (\x -> f x >>= g)) =
+= (\x -> f x >>= g) a = 
+= ((f a) >>= g) = (g (f a))
+			\end{lstlisting}
+			\item \texttt{m = Denied}:
+			\begin{lstlisting}
+((Denied >>= f) >>= g) = 
+(Denied >>= g) = Denied =
+(Denied >>= (\x -> f x >>= g))
+			\end{lstlisting}
+		\end{enumerate}
+\end{enumerate}
+\texttt{SecureFlow} satisfies the three monad laws, hence it is a monad.
+\end{proof}
