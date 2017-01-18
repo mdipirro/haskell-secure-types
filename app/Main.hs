@@ -11,7 +11,7 @@ import Security.Unsecure
 import Data.List
 
 login :: String -> String -> Hatch High [Credential] Bool
-login e p = pure (\cs -> Just $ elem (Credential e p) cs)
+login e p = pure (\cs -> elem (Credential e p) cs)
 
 askForLogin :: SecureFlow High [Credential] -> IO String
 askForLogin cs = do putStr "Email: "
@@ -20,22 +20,22 @@ askForLogin cs = do putStr "Email: "
                     p <- getLine
                     let check = (declassifyWith (login e p) cs) :: SecureFlow Medium Bool
                         success = open medium check
-                    case success of Just True  -> return e
-                                    _          -> do  putStr "Incorrect credentials, please try again\n"
-                                                      askForLogin cs
+                    case success of True  -> return e
+                                    _     -> do putStr "Incorrect credentials, please try again\n"
+                                                askForLogin cs
 
 showSalary :: Hatch High Int Int
-showSalary = pure (\s -> Just s)
+showSalary = pure id
 
-showEmployeeSalary :: String -> [SE.SEmployee] -> IO (Maybe Int)
-showEmployeeSalary _ []       = return Nothing
-showEmployeeSalary n (se:ses) = do  if n == ((\(Just a) -> a) $ open medium $ SE.email se)
+showEmployeeSalary :: String -> [SE.SEmployee] -> IO Int
+showEmployeeSalary _ []       = return 0
+showEmployeeSalary n (se:ses) = do  if n == (open medium $ SE.email se)
                                     then return $ open low $ ((declassifyWith showSalary (SE.salary se)) :: SecureFlow Low Int)
                                     else showEmployeeSalary n ses
 
 incSalary :: Int -> String -> [SE.SEmployee] -> [SE.SEmployee]
 incSalary _ _ []       =  []
-incSalary i t (se:ses) =  if t == ((\(Just a) -> a) $ open medium $ SE.email se)
+incSalary i t (se:ses) =  if t == (open medium $ SE.email se)
                           then (SE.increaseSalary i se):ses
                           else incSalary i t ses
 

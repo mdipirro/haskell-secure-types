@@ -23,12 +23,12 @@ fromEmployee e = SEmployee  (pure $ E.firstName e)
                             (pure $ E.leader e)
 
 viewPublicDetails :: LEQ Medium s => Ticket s -> SEmployee -> String
-viewPublicDetails Ticket se = "Firstname: " ++ (dejust $ firstName se) ++
-                              "\nLastname: " ++ (dejust $ lastName se) ++
-                              "\nBirthdate: " ++ (dejust $ birthdate se) ++
-                              "\nEmail address: " ++ (dejust $ email se) ++
-                              "\nIs a leader?: " ++ show (dejust $ leader se)
-                              where dejust e = (\(Just a) -> a) $ open medium e
+viewPublicDetails Ticket se = "Firstname: " ++ (open' $ firstName se) ++
+                              "\nLastname: " ++ (open' $ lastName se) ++
+                              "\nBirthdate: " ++ (open' $ birthdate se) ++
+                              "\nEmail address: " ++ (open' $ email se) ++
+                              "\nIs a leader?: " ++ show (open' $ leader se)
+                              where open' e = open medium e
 
 increaseSalary :: Int -> SEmployee -> SEmployee
 increaseSalary i se = SEmployee f l b s e le
