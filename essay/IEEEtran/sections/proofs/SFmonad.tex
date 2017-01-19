@@ -2,26 +2,26 @@
 \texttt{SecureFlow}, as defined, is a monad.
 \end{proposition}
 \begin{proof}
-We are to prove the three monad laws. 
+I am to prove the three monad laws. 
 \begin{enumerate}
 	\item \textbf{Left identity}: \texttt{return a >>= f = f a}
 		\begin{lstlisting}
 (return a >>= f) = (pure a >>= f) = 
-= ((Allowed a) >>= f) = f a
+= ((SF a) >>= f) = f a
 		\end{lstlisting}
 	
 	\item \textbf{Right identity}: \texttt{m >>= return = m}
 		\begin{lstlisting}
-((Allowed a) >>= return) = 
+((SF a) >>= return) = 
 = (return a) = (pure a) = 
-= (Allowed a) = m
+= (SF a) = m
 		\end{lstlisting}
 	\item \textbf{Associativity}: \texttt{(m >>= f) >>= g = m >>= ($\backslash$x -> f x >>= g)} 
 		\begin{lstlisting}
-(((Allowed a) >>= f) >>= g) = 
+(((SF a) >>= f) >>= g) = 
 = ((f a) >>= g) = (g (f a))
 
-(Allowed a >>= (\x -> f x >>= g)) =
+(SF a >>= (\x -> f x >>= g)) =
 = (\x -> f x >>= g) a = 
 = ((f a) >>= g) = (g (f a))
 		\end{lstlisting}

@@ -1,0 +1,30 @@
+\begin{proposition}
+\texttt{SecureComputation}, without type constraints, is a monad.
+\end{proposition}
+\begin{proof}
+I am to prove the three monad laws. During the proof, \texttt{>>=} and \texttt{return} are supposed to be, respectively, \texttt{sbind} and \texttt{sreturn}. I use the original names for the sake of consistency.
+\begin{enumerate}
+	\item \textbf{Left identity}: \texttt{return a >>= f = f a}
+		\begin{lstlisting}
+(return a >>= f) = (spure a >>= f) = 
+= ((SC a) >>= f) = f a
+		\end{lstlisting}
+	
+	\item \textbf{Right identity}: \texttt{m >>= return = m}
+		\begin{lstlisting}
+((SC a) >>= return) = 
+= (return a) = (spure a) = 
+= (SC a) = m
+		\end{lstlisting}
+	\item \textbf{Associativity}: \texttt{(m >>= f) >>= g = m >>= ($\backslash$x -> f x >>= g)} 
+		\begin{lstlisting}
+(((SF a) >>= f) >>= g) = 
+= ((f a) >>= g) = (g (f a))
+
+(SF a >>= (\x -> f x >>= g)) =
+= (\x -> f x >>= g) a = 
+= ((f a) >>= g) = (g (f a))
+		\end{lstlisting}
+\end{enumerate}
+\texttt{SecureComputation} satisfies the three monad laws, hence it is a monad.
+\end{proof}

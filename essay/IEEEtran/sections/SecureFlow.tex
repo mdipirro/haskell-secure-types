@@ -38,15 +38,15 @@ Here, \texttt{Low}, \texttt{Medium} and \texttt{High} are singleton types (\cite
 \subsection{SecureFlow Implementation}
 Basically, \texttt{SecureFlow} is just an identity monad instance tagged with a proposition allowing access to its value. Actually, that proposition is just a ticket. Listing~\ref{lst:secureflow} shows the module.
 \begin{lstlisting}[caption={SecureFlow monad}, label={lst:secureflow}, breaklines=true]
-data SecureFlow s a = Allowed a
+data SecureFlow s a = SF a
 type Hatch s a b = SecureFlow s (a -> b)
 
 instance Functor (SecureFlow s) where
-  fmap f (Allowed x)  = Allowed $ f x
+  fmap f (SF x)  = SF $ f x
 
-instance Applicative (SecureFlow s) where
-  pure x                      = Allowed x
-  (Allowed f) <*> (Allowed x) = Allowed $ f x
+instance Applicative (SF s) where
+  pure x            = SF x
+  (SF f) <*> (SF x) = SF $ f x
 
 instance Monad (SecureFlow s) where
   return            = pure
@@ -60,7 +60,7 @@ declassifyWith :: (LEQ s k, LEQ s' s) => Hatch k a b -> SecureFlow s a -> Secure
 \end{lstlisting}
 %\input{sections/SecureFlow_proofs/functor}
 %\input{sections/SecureFlow_proofs/applicative}
-\input{sections/SecureFlow_proofs/monad}
+\input{sections/proofs/SFmonad}
 \texttt{SecureFlow} is also a functor and an applicative. The proof is largely similar to the last one, so it is omitted. \\
 The module also exports three important functions, \texttt{up}, \texttt{open} and \texttt{declassifyWith}. \\
 \texttt{open} is used to look at a protected value of type \texttt{SecureFlow s a}. However, in order to do that, one has to prove to have a value of type \texttt{s}. Restricting access to values of different such types s by means of the module system allows fine control over which parts of the program can look at what data. This proof is given with the ticketing system. Note that, if the value is protected with \texttt{SecureFlow s a}, the ticket type must be in the \texttt{LEQ} relation with \texttt{s}. This actually means $s \sqsubseteq s'$ must hold. Otherwise the compiler gives a type error because of the unsatisfied type constraint \texttt{LEQ s s'}. \\
