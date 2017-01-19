@@ -1,7 +1,7 @@
 \section{The Unsecure module}\label{sec:usecure}
 The \texttt{Unsecure} module makes sure an input value will be validated before its use. Listing~\ref{lst:unsecure} shows its definition.
 
-\begin{lstlisting}[caption={Unsecure module}, label={lst:unsecure}, frame=single]
+\begin{lstlisting}[caption={Unsecure module}, label={lst:unsecure}]
 type ValidationFunctions a b =
   [a -> Maybe b]
 data Unsecure a b =  
@@ -18,7 +18,7 @@ upure :: a -> ValidationFunctions a b
 Here, \texttt{a} and \texttt{b} represent \textit{every possible} type, as usual in Haskell type definitions. The former is the input type and the latter is an \textit{error} type. Using an error type is necessary, because the validation could fail. If it fails, a list of errors is returned. Following the Haskell error mechanism, every error in that list is represented as a constructor of the type \texttt{b}. \\
 \texttt{Unsecure} is defined as a pair of \texttt{ValidationFunctions} (\textit{VF}), from value of type \texttt{a} to a value of an error type \texttt{b}, and a value of type \texttt{a} (the ''value''). \texttt{validate} simply makes sure that the ''value'' actually meets the \textit{VF} constraints. If so, it returns the ''value'', otherwise it returns the error list, since the ''value'' could fail more than one constraint. This is why \texttt{Either} is required. \\
 \texttt{upure} and \texttt{umap} try to simulate an applicative approach. The former allows programmers to create an \texttt{Unsecure} value. The latter allows them to manipulate the ''value'' before validation. An \texttt{Unsecure} value is supposed to be created by an IO function and manipulated by programmers. It may not be defined as a functor or an applicative one because of its own nature. Type \texttt{a} must not be changed, because with this definition the validation functions are based on it. A possible solutions would be using a constrained functor in order to be sure that the ''value'' type could be constrained. However, this may not be done with normal functors. Nevertheless, \citeauthor{Sculthorpe:13:ConstrainedMonad} \cite{Sculthorpe:13:ConstrainedMonad} had shown that this is possible with a little effort, and there are a lot of other works on this topic (an example is Co-Yoneda functor, based on Yoneda Lemma, \cite{elkins2009calculating}, \cite{yoneda}). For the sake of simplicity, this work is limited to classic functor, applicative ones and monads. \\
-\begin{lstlisting}[label={unsecureNat}, frame=single, breaklines=true, caption={Unsecure for natural numbers}]
+\begin{lstlisting}[label={unsecureNat}, breaklines=true, caption={Unsecure for natural numbers}]
 data NatError = NegativeNumber | NonNumeric
 
 getNat :: IO (Unsecure String NatError)
