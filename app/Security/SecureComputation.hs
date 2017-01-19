@@ -28,6 +28,9 @@ sapp :: (MustBePure m, MustBePure m') => SecureComputation m' (a -> b)
         -> SecureComputation m a -> SecureComputation m' b
 sapp (SC f) sc = smap f sc
 
+sreturn :: a -> SecureComputation m a
+sreturn = spure
+
 sbind :: (MustBePure m, MustBePure m') => SecureComputation m a
           -> (a -> SecureComputation m' b) -> SecureComputation m' b
 sbind (SC a) f = f a

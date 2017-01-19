@@ -27,6 +27,13 @@ askForLogin cs = do putStr "Email: "
 showSalary :: Hatch High Int Int
 showSalary = pure id
 
+calculateNewSalaries :: [SE.SEmployee] -> SecureFlow High [Int]
+calculateNewSalaries es = pure $ map getIncrement es
+                          where getIncrement e =  if open low $ SE.leader e
+                                                  then 100
+                                                  else 50
+
+
 showEmployeeSalary :: String -> [SE.SEmployee] -> IO Int
 showEmployeeSalary _ []       = return 0
 showEmployeeSalary n (se:ses) = do  if n == (open medium $ SE.email se)
