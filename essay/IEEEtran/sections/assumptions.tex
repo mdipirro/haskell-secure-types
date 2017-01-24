@@ -1,0 +1,18 @@
+\section{Assumptions}\label{sec:assumptions}
+In the rest of the paper, I assume that the programming language I work with is a controlled version of Haskell, where code is divided up into trusted code, in brief every possible user defined extension of my library, and untrusted code, written by the attacker. The latter may only use the secure modules, and it is defined as the code actually implementing the application. 
+
+\subsection{Trusted or Untrusted}
+Suppose a minimal directory structure like the following:
+\dirtree{%
+	.1 /.
+	.2 App.
+	.3 Src. 
+	.4 Model. 
+	.4 IO. 
+	.1 SecureModule. 
+	.2 Unsecure. 
+	.2 SecureFlow. 
+	.2 SecureComputation. 
+}
+Here, \texttt{SecureModule} represents a directory containing the secure library. \texttt{App} is, on the contrary, supposed to contain every application-related file, such as Haskell modules and configuration or data files. In particular, every Haskell module but Main.hs (generally defined as the main file) should be into \texttt{Src}. In this simple example \texttt{Src} is made up of two subdirectories, \texttt{Model} and \texttt{IO}. The former should consist of every module implementing the application behavior and managing the data, logic and rules. The latter should include every IO-related module, such as those used for interfacing with users, databases or configuration files. \\
+Only trusted programmers are allowed to write \texttt{IO} modules. Their task is to specify declassification policies, input validation functions and to \textit{override} every IO function in order to satisfy security requirements. Conversely, untrusted programmers may not write anything related with IO, but they can contribute to any other application-related file, as well as trusted ones.
