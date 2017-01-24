@@ -1,1 +1,5 @@
-\section{Conclusion}\label{sec:conclusion}
+\section{Conclusions}\label{sec:conclusion}
+Taking ideas from the literature, in this paper I have presented a simple library for information security in Haskell. I have formalised three new types satisfying three important principles: mandatory input validation, non-inference and computation on pure data. Two of them ensure the corresponding property in a static way so that it is satisfied if and only if the source code compiles. The first, contrariwise, may only be checked at run-time. \\
+Besides, the library provides a simple way for formalising declassification policies. Considering it is wholly generalised, it might be adapted for satisfying almost every security requirement. \\
+The actual Haskell implementation is partially based on monads, a widespread concept in functional programming. Although only one out of three types is a monad instance, the idea behind the other two is exactly the same. It would be possible to make them concrete monad instances, but that would require an effort out of the scope of this paper. \\
+The library implementation and every example shown in this paper are publicly available in \cite{mdipirroGitHub}. 

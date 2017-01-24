@@ -42,6 +42,6 @@ Note that programmers can mark as tainted every value they want. They are also a
 	\item modification value (\textit{v});
 	\item product name (\textit{p});
 	\item the real modification function (\textit{f}) (for instance, \texttt{modifyPrice});
-	\item a list of stores (s).
+	\item a list of stores (\textit{s}).
 \end{enumerate}
-It returns a list of stores where \textit{p} has been modified according to \textit{f} based on \textit{v}. Note that \textit{v} and \textit{s} must be pure, while it doesn't matter for \textit{p}. A type error is detected every time an unpure (or tainted) value is provided supposing it to be a pure one. If the code compiles and \texttt{SecureComputation} is cleverly used, there are not operations on pure data starting from tainted one. 
+It returns a list of stores where \textit{p} has been modified according to \textit{f} based on \textit{v}. Note that \textit{v} and \textit{s} must be pure while it doesn't matter for \textit{p}. A type error is detected every time an unpure (or tainted) value is provided supposing it to be a pure one. If the code compiles and \texttt{SecureComputation} is cleverly used, there are not operations on pure data based on tainted one. 
