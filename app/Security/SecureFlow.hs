@@ -1,4 +1,5 @@
-module Security.SecureFlow (SecureFlow, Hatch, open, up, declassifyWith) where
+module Security.SecureFlow (SecureFlow, Hatch, Hatch', open, up, declassifyWith,
+makeHatch, declassifyWith') where
 
 import Control.Monad.Identity
 import Control.Applicative
@@ -11,6 +12,7 @@ import Security.Lattice
 -- its value.
 data SecureFlow s a = SF a
 type Hatch s a b = SecureFlow s (a -> b)
+type Hatch' s l a b = SecureFlow l (SecureFlow s (a -> b))
 
 instance Functor (SecureFlow s) where
     fmap f (SF x)  = SF $ f x
@@ -33,6 +35,9 @@ open Ticket (SF a) = a
 up :: LEQ s s' => SecureFlow s a -> SecureFlow s' a
 up (SF a) = SF a
 
+makeHatch :: (a -> b) -> Hatch' s l a b
+makeHatch f = pure $ pure f
+
 -- | Declassification
 unsafeCoerceLevels :: LEQ s' s => SecureFlow s a -> SecureFlow s' a
 unsafeCoerceLevels (SF x) = SF x
@@ -40,3 +45,6 @@ unsafeCoerceLevels (SF x) = SF x
 declassifyWith :: (LEQ s k, LEQ s' s) => Hatch k a b -> SecureFlow s a -> SecureFlow s' b
 declassifyWith (SF f) s = unsafeCoerceLevels $ do x <- s
                                                   return $ f x
+
+declassifyWith' :: (LEQ s k, LEQ s' s, LEQ l s', LEQ s' l) => Hatch' k l a b -> SecureFlow s a -> SecureFlow s' b
+declassifyWith' (SF sf) s = declassifyWith sf s
