@@ -24,8 +24,8 @@ askForLogin cs = do putStr "Email: "
                                     _     -> do putStr "Incorrect credentials, please try again\n"
                                                 askForLogin cs
 
-showSalary :: Hatch High Int Int
-showSalary = pure id
+showSalary :: Hatch' High Medium Int Int
+showSalary = makeHatch id
 
 calculateNewSalaries :: [SE.SEmployee] -> SecureFlow High [Int]
 calculateNewSalaries es = pure $ map getIncrement es
@@ -37,7 +37,7 @@ calculateNewSalaries es = pure $ map getIncrement es
 showEmployeeSalary :: String -> [SE.SEmployee] -> IO Int
 showEmployeeSalary _ []       = return 0
 showEmployeeSalary n (se:ses) = do  if n == (open medium $ SE.email se)
-                                    then return $ open low $ ((declassifyWith showSalary (SE.salary se)) :: SecureFlow Low Int)
+                                    then return $ open medium $ ((declassifyWith' showSalary (SE.salary se)) :: SecureFlow Medium Int)
                                     else showEmployeeSalary n ses
 
 incSalary :: Int -> String -> [SE.SEmployee] -> [SE.SEmployee]
@@ -46,14 +46,7 @@ incSalary i t (se:ses) =  if t == (open medium $ SE.email se)
                           then (SE.increaseSalary i se):ses
                           else incSalary i t ses
 
-{-incPrice :: SC.SecureComputation SC.T String -> String
-            -> SC.SecureComputation SC.P [Store] -> SC.SecureComputation SC.P [Store]
-incPrice i n sc = SC.sapp (SC.spure $ (\ss -> incPrice' i n ss)) sc
-                  where incPrice' i n (s:ss) =  if n == productName s
-                                                then (increasePrice (read . SC.open $ i) s):ss
-                                                else s:(incPrice' i n ss)-}
-
-storesOperation :: Read a => SC.SecureComputation SC.T String -> String -> (a -> Store -> Store)
+storesOperation :: Read a => SC.SecureComputation SC.P String -> String -> (a -> Store -> Store)
                     -> SC.SecureComputation SC.P [Store] -> SC.SecureComputation SC.P [Store]
 storesOperation m n f sc =  SC.sapp (SC.spure $ (\ss -> op m n ss)) sc
                             where op i n (s:ss) = if n == productName s
@@ -89,15 +82,20 @@ menu se ss = do putStr $ "\n\n0) Exit \n"
                           "4" -> do putStr $ "Enter the product name: "
                                     p <- getLine
                                     putStr $ "Enter the increase: "
-                                    i <- getUnpureNat
-                                    --let ss' = incPrice i p ss
+                                    --i <- getUnpureNat
+                                    --UNSAFE!!
+                                    l <- getLine
+                                    let i = SC.spure l :: SC.SecureComputation SC.P String
                                     let ss' = storesOperation i p (increasePrice) ss
                                     print $ SC.open ss'
                                     menu se ss'
                           "5" -> do putStr $ "Enter the product name: "
                                     p <- getLine
                                     putStr $ "Enter the increase: "
-                                    i <- getUnpureNat
+                                    --i <- getUnpureNat
+                                    --UNSAFE!!
+                                    l <- getLine
+                                    let i = SC.spure l :: SC.SecureComputation SC.P String
                                     let ss' = storesOperation i p (increaseStocks) ss
                                     print $ SC.open ss'
                                     menu se ss'
@@ -105,9 +103,9 @@ menu se ss = do putStr $ "\n\n0) Exit \n"
 
 
 main :: IO ()
-main = do {-cs <-getCredentials
-          e <- askForLogin cs-}
+main = do cs <-getCredentials
+          e <- askForLogin cs
           se <- getSecureEmployees
           ss <- getStores
-          --putStr $ "Welcome, " ++ e ++ "\n"
+          putStr $ "Welcome, " ++ e ++ "\n"
           menu se ss
