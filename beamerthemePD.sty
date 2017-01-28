@@ -12,8 +12,8 @@
 
 \newcommand\titlepic{theme/unipd-logo}
 
-\definecolor{UniPDRed}{HTML}{b5121b}
-\definecolor{orangePeel}{HTML}{FF9F00}
+\definecolor{bgColor}{HTML}{000000}
+\definecolor{fgColor}{HTML}{FFFFFF}
 
 \newlength{\@headerdist}
 \setlength{\@headerdist}{5mm}
@@ -32,21 +32,21 @@
 \setbeamerfont{date}{size=\large}
 \setbeamerfont{example text}{series=\bfseries}
 \setbeamerfont{section}{series=\bfseries}
-\setbeamercolor{structure}{fg=white}
-\setbeamercolor{subsection in toc}{fg=white}
-\setbeamercolor{title}{fg=white}
+\setbeamercolor{structure}{fg=fgColor}
+\setbeamercolor{subsection in toc}{fg=fgColor}
+\setbeamercolor{title}{fg=fgColor}
 \setbeamerfont{title}{series=\bfseries}
 \setbeamerfont{block title alerted}{series=\bfseries}
-\setbeamercolor{block title}{bg=white,fg=white!20!white}
-\setbeamercolor{block body}{bg=white!15!white}
-\setbeamercolor{block title example}{bg=white!60!white}
-\setbeamercolor{block body example}{bg=white!20!white}
-\setbeamercolor{block title alerted}{bg=red!60!white,fg=white}
-\setbeamercolor{block body alerted}{bg=red!10!white}
-\setbeamercolor{title page}{fg=white}
-\setbeamercolor{frame body}{fg=white}
-\setbeamercolor{normal text}{fg=black}
-\setbeamercolor{background canvas}{bg=UniPDRed}
+\setbeamercolor{block title}{bg=fgColor,fg=fgColor!20!fgColor}
+\setbeamercolor{block body}{bg=fgColor!15!fgColor}
+\setbeamercolor{block title example}{bg=fgColor!60!fgColor}
+\setbeamercolor{block body example}{bg=fgColor!20!fgColor}
+\setbeamercolor{block title alerted}{bg=red!60!fgColor,fg=fgColor}
+\setbeamercolor{block body alerted}{bg=red!10!fgColor}
+\setbeamercolor{title page}{fg=fgColor}
+\setbeamercolor{frame body}{fg=fgColor}
+\setbeamercolor{normal text}{fg=fgColor}
+\setbeamercolor{background canvas}{bg=bgColor}
 
 
 \setbeamertemplate{itemize item}[default]
@@ -56,7 +56,7 @@
 \setbeamertemplate{navigation symbols}{}
 
 % frame
-\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{frametitle}{fg=fgColor}
 \setbeamerfont{frametitle}{series=\mdseries,size=\Large}
 \setbeamerfont{framesubtitle}{series=\mdseries,size=\large}
 
@@ -75,7 +75,7 @@
 }
 
 % headline
-\setbeamercolor{headline}{fg=white}
+\setbeamercolor{headline}{fg=fgColor}
 \setbeamertemplate{headline}{
 	\ifbeamer@plainframe
 	\else
@@ -111,7 +111,7 @@
 }
 
 % footer with name, date and page numbers
-\setbeamercolor{footline}{fg=white}
+\setbeamercolor{footline}{fg=fgColor}
 \setbeamertemplate{footline}{
   \ifbeamer@plainframe
   \else
@@ -141,7 +141,7 @@
 }
 
 \def\makethanks{%
-	\setbeamercolor{background canvas}{bg=UniPDRed}
+	\setbeamercolor{background canvas}{bg=bgColor}
 	\begin{frame}[plain, noframenumbering]
 		
 		% UniPD
