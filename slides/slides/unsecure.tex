@@ -1,4 +1,33 @@
-\begin{frame}
+\begin{frame}[fragile,containsverbatim]
 \frametitle{The Unsecure module}
+\only<2->{\vspace{-2cm}}
+\begin{itemize}
+	\item<1> Without input validation the code is vulnerable to software attacks
+	\item<2-> \textbf{Unsecure}
+	\begin{itemize}
+		\item<2-> Ensures an input value will be validated before its use
+		\item<2-> Is defined as a pair (Validation Functions, input value)
+	\end{itemize}
+\end{itemize}	
+\begin{center}
+\only<1>{
+	\includegraphics[scale=0.6]{DataValidation}	
+}
+\only<2->{\vspace{1.5cm}}
+\begin{lstlisting}
+<@\only<2->{getSafeString :: Int $\rightarrow$ IO (Unsecure String Bool)}@>
+<@\only<2->{getSafeString n = do l $\leftarrow$ getLine}@>
+                <@\only<2->{return \$ upure [(\/s $\rightarrow$ length s $<$= n)]}@>
+\end{lstlisting}
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+\node<3->[white,font=\fontsize{0.4cm}{0.5cm}\selectfont](p) at (5,3.4) {Unsecure box};
+\draw<3-> [->,white,line width=1pt] (5,2.4) -- (p);
 
+\node<4>[white,font=\fontsize{0.4cm}{0.5cm}\selectfont](q) at (7.8,3.6) {Error type};
+\draw<4> [->,white,line width=1pt] (7.8,2.4) -- (q);
+
+\node<4>[white,font=\fontsize{0.4cm}{0.5cm}\selectfont](r) at (7.8,0) {List of String $\rightarrow$ Bool functions};
+\draw<4> [->,white,line width=1pt] (7.8,1) -- (r);
+\end{tikzpicture}
 \end{frame}
