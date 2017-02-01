@@ -1,0 +1,43 @@
+% Adapted from UH Manoa theme by:
+% UH Manoa presentation theme for beamer
+% Jeff Delmerico <jeffdelmerico@gmail.com> 2012
+% https://github.com/jeffdelmerico/UH_Beamer_Theme.git
+
+
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
+\usetheme{PD}
+
+\usepackage[absolute,overlay]{textpos}
+\usepackage{helvet}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,fit}
+
+\title{Title}
+\subtitle{\newline Subtitle}
+\author{Matteo Di Pirro}
+\date{Date...}
+\institute{University of Padova}
+
+\begin{document}
+
+\newcommand{\turnOffNumbers}{true} %hide frame numbers in footer
+
+\begin{frame}[noframenumbering]
+\titlepage
+\end{frame}
+
+\let\turnOffNumbers\empty
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+%\section{title}
+%\input{slideFile}
+
+\appendix
+\makethanks
+\renewcommand{\turnOffNumbers}{true} %hide frame numbers in footer
+% extra slides
+\end{document}

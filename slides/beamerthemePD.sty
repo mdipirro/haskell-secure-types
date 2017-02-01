@@ -1,0 +1,170 @@
+% UniPD presentation theme for beamer
+% Matteo Di Pirro <matteodipirro@gmail.com>
+% 
+% Adapted from UH Manoa theme by:
+% UH Manoa presentation theme for beamer
+% Jeff Delmerico <jeffdelmerico@gmail.com> 2012
+% https://github.com/jeffdelmerico/UH_Beamer_Theme.git
+
+\usepackage{graphicx}
+
+\ProvidesPackage{beamerthemePD}[2016/11/05 PD Beamer Theme]
+
+\newcommand\titlepic{theme/unipd-logo}
+
+\definecolor{bgColor}{HTML}{002b36}
+\definecolor{fgColor}{HTML}{FFFFFF}
+
+\newlength{\@headerdist}
+\setlength{\@headerdist}{5mm}
+
+\newcommand{\address}
+{
+	BSc in Computer Science \\
+	Department of Mathematics \\
+}
+
+\graphicspath{{images/}}
+
+\mode<presentation>
+
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{date}{size=\large}
+\setbeamerfont{example text}{series=\bfseries}
+\setbeamerfont{section}{series=\bfseries}
+\setbeamercolor{structure}{fg=fgColor}
+\setbeamercolor{subsection in toc}{fg=fgColor}
+\setbeamercolor{title}{fg=fgColor}
+\setbeamerfont{title}{series=\bfseries}
+\setbeamerfont{block title alerted}{series=\bfseries}
+\setbeamercolor{block title}{bg=fgColor,fg=fgColor!20!fgColor}
+\setbeamercolor{block body}{bg=fgColor!15!fgColor}
+\setbeamercolor{block title example}{bg=fgColor!60!fgColor}
+\setbeamercolor{block body example}{bg=fgColor!20!fgColor}
+\setbeamercolor{block title alerted}{bg=red!60!fgColor,fg=fgColor}
+\setbeamercolor{block body alerted}{bg=red!10!fgColor}
+\setbeamercolor{title page}{fg=fgColor}
+\setbeamercolor{frame body}{fg=fgColor}
+\setbeamercolor{normal text}{fg=fgColor}
+\setbeamercolor{background canvas}{bg=bgColor}
+
+
+\setbeamertemplate{itemize item}[default]
+\setbeamertemplate{itemize subitem}[circle]
+
+% disable navigation symbols 
+\setbeamertemplate{navigation symbols}{}
+
+% frame
+\setbeamercolor{frametitle}{fg=fgColor}
+\setbeamerfont{frametitle}{series=\mdseries,size=\Large}
+\setbeamerfont{framesubtitle}{series=\mdseries,size=\large}
+
+\setbeamertemplate{frametitle}
+{
+  \ifbeamer@plainframe
+  \else
+  	\vspace{-.25cm}
+    \textbf{\insertframetitle}
+	\begin{textblock*}{1cm}(9.7cm,-7.5cm)
+		\rule{2cm}{7.5cm}
+		\includegraphics[scale=0.55]{theme/unipd-logo}
+	\end{textblock*}
+    \vspace{.50cm}
+  \fi
+}
+
+% headline
+\setbeamercolor{headline}{fg=fgColor}
+\setbeamertemplate{headline}{
+	\ifbeamer@plainframe
+	\else
+    	\vspace{8mm}
+    	\leavevmode\tiny%
+    	\hspace*{9.15cm}
+	   	\normalsize
+	\fi
+}
+
+% title page
+\setbeamertemplate{title page}{
+	\textbf{\LARGE{\inserttitle}}
+	\vspace{1cm}
+	\textbf{\large{\insertsubtitle}}
+	\vfill
+	\begin{columns}
+		\begin{column}{.45\textwidth}
+			\textbf{\insertauthor}\\[3mm]
+			\scriptsize
+			\address
+			\vspace*{0.25cm}
+			\insertshortinstitute
+			\vspace*{0.25cm}
+			\insertshortdate
+		\end{column}
+		\begin{column}{.45\textwidth}
+			\hfill\includegraphics[scale=0.8,keepaspectratio]{\titlepic}
+		\end{column}
+	\end{columns}
+	\normalsize
+	\setbeamertemplate{footline}{}
+}
+
+% footer with name, date and page numbers
+\setbeamercolor{footline}{fg=fgColor}
+\setbeamertemplate{footline}{
+  \ifbeamer@plainframe
+  \else
+    \leavevmode\tiny%
+    \hspace*{2.0cm}%
+    \makebox[3cm][l]{\insertauthor}%
+    \makebox[3cm][l]{\insertdate}%
+	  \hfill
+	  \ifx\insertsection\empty
+	  \else
+    	\insertsection
+	  \fi
+	  \ifx\insertsubsection\empty
+	  \else
+	  	:\insertsubsection
+	  \fi
+	  \ifx\insertsubsubsection\empty
+	  \else
+	    :\insertsubsubsection
+	  \fi
+	  \ifx\turnOffNumbers\empty
+      \hfill\insertframenumber/\inserttotalframenumber\hspace{5mm}%
+      \else
+      \fi
+    \vspace{3mm}%
+  \fi
+}
+
+\def\makethanks{%
+	\setbeamercolor{background canvas}{bg=bgColor}
+	\begin{frame}[plain, noframenumbering]
+		
+		% UniPD
+		\begin{textblock*}{1cm}(0cm,-7.5cm)
+			\rule{2cm}{7.5cm}
+			\includegraphics[scale=0.75]{theme/unipd-logo}
+		\end{textblock*}
+		
+		\vspace{1cm}
+		\begin{center}
+			{\fontsize{20pt}{15pt}\selectfont
+				Thank you for your attention. \\
+				\vspace{2cm}
+				Questions?
+			}
+		\end{center}
+		% Dipartimento di matematica
+		\begin{textblock*}{1cm}(9.9cm,7.6cm)
+			%\rule{2cm}{7.5cm}
+			\includegraphics[scale=0.2]{theme/math_unipd}
+		\end{textblock*}
+	\end{frame}
+}
+
+\mode
+<all>
