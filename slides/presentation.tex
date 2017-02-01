@@ -11,6 +11,7 @@
 \usepackage[absolute,overlay]{textpos}
 \usepackage{helvet}
 \usepackage{tikz}
+\usepackage{listings}
 \usetikzlibrary{tikzmark,fit}
 
 \title{Ensuring Information Security \newline by Using Haskell Advanced Type System}
@@ -18,6 +19,8 @@
 \author{Matteo Di Pirro}
 \date{February 16th, 2017}
 \institute{University of Padova}
+
+\lstset{escapeinside={<@}{@>}}
 
 \begin{document}
 
@@ -35,7 +38,6 @@
 
 \section{Software security}
 \input{slides/softwareSecurity}
-\input{slides/languageTechniques}
 
 \section{Running example}
 \input{slides/runningExample}
