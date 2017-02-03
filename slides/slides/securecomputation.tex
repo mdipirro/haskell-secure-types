@@ -1,3 +1,25 @@
-\begin{frame}{The SecureComputation module}
-
+\begin{frame}[fragile]{The SecureComputation module}
+	\begin{itemize}
+		\item Ensures compile time taint analysis
+		\item Operations on sensitive data may be allowed only with untainted values
+	\end{itemize}
+	\hspace{-2cm}
+	\begin{lstlisting}[basicstyle=\fontsize{9}{9}\ttfamily]
+	getUnpureVal :: IO (SecureComputation T String)
+	getUnpureVal = do n <- getLine
+	                  return $ spure n
+	\end{lstlisting}
+	\begin{onlyenv}<3->
+		\begin{lstlisting}[basicstyle=\fontsize{9}{9}\ttfamily]
+		fun :: SC P Model -> SC P String -> SC P Model
+		\end{lstlisting}
+	\end{onlyenv}
+	\begin{tikzpicture}[remember picture,overlay]
+	\node<2>[draw,minimum size=0.5cm,line width=1pt,white,circle,label=above:{\color{white}Tainted}] at (7.65,1.4) {};
+	
+	\node<4>[draw,minimum size=0.5cm,line width=1pt,white,circle,label=below:{\color{white}Pure value required}] at (4.9,0.8) {};
+	\end{tikzpicture}
+	\begin{itemize}
+		\item<5> \textbf{Compilation error} if \texttt{getUnpureVal} is used as a \texttt{fun} parameter
+	\end{itemize}
 \end{frame}

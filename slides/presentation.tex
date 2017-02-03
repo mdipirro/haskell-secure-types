@@ -11,7 +11,7 @@
 \usepackage[absolute,overlay]{textpos}
 \usepackage{helvet}
 \usepackage{tikz}
-\usepackage{listings}
+\usepackage{listings,lstautogobble}
 \usetikzlibrary{tikzmark,fit}
 
 \title{Ensuring Information Security \newline by Using Haskell Advanced Type System}
@@ -20,7 +20,9 @@
 \date{February 16th, 2017}
 \institute{University of Padova}
 
-\lstset{escapeinside={<@}{@>}}
+\lstset{
+	autogobble=true
+}
 
 \begin{document}
 
@@ -38,17 +40,19 @@
 
 \section{Software security}
 \input{slides/softwareSecurity}
-
-\section{Running example}
-\input{slides/runningExample}
+\input{slides/languageBasedSecurity}
 
 \section{Haskell Modules}
 	\subsection{Unsecure}
 	\input{slides/unsecure}
 	\subsection{SecureFlow}
 	\input{slides/secureflow}
+	\input{slides/declassification}
 	\subsection{SecureComputation}
 	\input{slides/securecomputation}
+	
+\section{Conclusions}
+\input{slides/conclusions}
 	
 \appendix
 \makethanks

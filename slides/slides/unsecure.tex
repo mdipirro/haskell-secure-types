@@ -1,4 +1,4 @@
-\begin{frame}[fragile,containsverbatim]{The Unsecure module}
+\begin{frame}[fragile]{The Unsecure module}
 %\vspace{-1.5cm}
 \begin{itemize}
 	\item<1-> Ensures an input value will be validated before its use
@@ -6,7 +6,7 @@
 \end{itemize}	
 \begin{center}
 \vspace{1.5cm}
-\begin{lstlisting}[basicstyle=\fontsize{9}{11}\ttfamily]
+\begin{lstlisting}[basicstyle=\fontsize{9}{9}\ttfamily]
 getSafeString :: Int -> IO (Unsecure String Bool)
 getSafeString n = do l <- getLine
                      return $ upure [(\s -> length s <= n)]
