@@ -10,3 +10,4 @@ Three main golas are chased, as follows:
 1. By using higher-order functions, I try to validate different inputs _before_ their use. If the input value is boxed into another type, the programmers have to provide a **validation function** in order to "extract" it. With functional programming this can be done in a very easy and pretty way. 
 2. By using Haskell type system, I try to ensure two compile time properties. The first is **non-interference** and the second is a constrainted **computation on untainted data**. I also supply a declassification combinator for relaxing the notion of non-interference. 
 
+[![Build Status](https://travis-ci.com/mdipirro/haskell-secure-types.svg?token=7LSQJy3DGkLbRMBT5MDM&branch=master)](https://travis-ci.com/mdipirro/haskell-secure-types)
