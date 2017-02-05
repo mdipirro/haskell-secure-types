@@ -10,10 +10,14 @@ addons:
     - cm-super
     - latexmk
     - tex4ht
+    - texlive-fonts-recommended
     - texlive-lang-italian
+    - latex-xcolor
+    - latex-beamer   
     - texlive-bibtex-extra
+    - texlive-generic
     - biber
 script:
 - make
-before_deploy: 
+before_deploy:
 - git fetch --tags
