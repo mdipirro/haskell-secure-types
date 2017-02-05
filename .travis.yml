@@ -15,7 +15,7 @@ addons:
     - latex-xcolor
     - latex-beamer   
     - texlive-bibtex-extra
-    - texlive-generic
+    - texlive-generic-extra
     - biber
 script:
 - make
