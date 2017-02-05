@@ -15,5 +15,5 @@ addons:
     - biber
 script:
 - make
-before_deploy:
+before_deploy: 
 - git fetch --tags
