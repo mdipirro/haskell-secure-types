@@ -4,4 +4,4 @@ all: $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -C $@
 
-.PHONY: all $(SUBDIRS)
+.PHONY: all $(SUBDIRS) 
