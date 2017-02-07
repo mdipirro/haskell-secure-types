@@ -1,6 +1,6 @@
 \section{The SecureComputation module}\label{sec:computation}
 The idea behind \texttt{SecureComputation} is exactly the same as \texttt{SecureFlow}. The difference relies on its aim. The former provides a way of working with pure data. \\
-Taint analysis (\cite{schwartz2010all}, \cite{newsome2005dynamic}) is a well-known technique for dynamic detecting software vulnerabilities. However, this dynamic dimension is not fully sound when applied to modern software. It is so much complex that a full testing process is practically infeasible. Moreover, like Dijkstra said, "program testing can be used to show the presence of bugs, but never to show their absence". That means we cannot just trust dynamic analysis. We need a statical check. \\
+Taint analysis (\cite{schwartz2010all}, \cite{newsome2005dynamic}) is a well-known technique for dynamic detecting software vulnerabilities. However, this dynamic dimension is not fully sound when applied to modern software. It is so much complex that a full testing process is practically infeasible. Thus, we cannot just trust dynamic analysis. We need a statical check. \\
 My version of this statical check is \texttt{SecureComputation} shown in a shortened form in Listing~\ref{lst:securecomp}.
 \begin{lstlisting}[caption={SecureComputation module}, label={lst:securecomp}, breaklines=true]
 data SC m a = SC a
@@ -28,7 +28,7 @@ sreturn = spure
 sbind :: (MustBePure m, MustBePure m') => SC m a -> (a -> SC m' b) -> SC m' b
 sbind (SC a) f = f a
 \end{lstlisting}
-As one can note, \texttt{SecureComputation} is based on the same type family method as \texttt{SecureFlow}. Basically, \texttt{P} and \texttt{T} are singleton types meaning \textit{Pure} and \textit{Tainted}. Naturally, only \texttt{P} is defined as an instance of the \texttt{MustBePure} constraint. \\
+As one may notice, \texttt{SecureComputation} is based on the same type family method as \texttt{SecureFlow}. Basically, \texttt{P} and \texttt{T} are singleton types meaning \textit{Pure} and \textit{Tainted}. Naturally, only \texttt{P} is defined as an instance of the \texttt{MustBePure} constraint. \\
 An \textit{SecureComputation} encapsulated value may be opened if and only if the \texttt{SecureComputation} holder is pure. Furthermore, computations on encapsulated values are allowed if and only if those values are pure (in the meaning that their containers are). \\
 Again, \texttt{SecureComputation} is not a monad because of its type constraints. Making it a monad would be possible (\cite{Sculthorpe:13:ConstrainedMonad}), as stated in Section~\ref{sec:unsecure}, but it is out of this paper scope. For the sake of simplicity I redefine functor, applicative and monad functions with another name (actually just adding \textit{s} as prefix) so that it might be used \textit{like} a monad. The meaning of those functions (\texttt{smap}, \texttt{spure}, \texttt{sapp} and \texttt{sbind}) is the usual one except for type constraints. Validity of a potential real instantiation would be also provable without considering type constraints. An example is given by the following proposition.
 \input{sections/proofs/SCmonad}
@@ -38,7 +38,7 @@ getUnpureNat :: IO (SecureComputation T String)
 getUnpureNat = do n <- getLine
                   return $ spure n
 \end{lstlisting}
-Note that programmers can mark as tainted every value they want. They are also able to make differences among different input sources and values. That points \texttt{SecureComputation} flexibility out. For instance, recall the running example, and in particular the operations on stores. Every stored product has a price and a number representing its stocks. Increments or decrements on those numbers are allowed only with pure values. Otherwise a type error must be detected. A suitable general function should have the following type signature:\\
+Programmers can mark as tainted every value they want. They are also able to make differences among different input sources and values. That points \texttt{SecureComputation} flexibility out. For instance, recall the running example, and in particular the operations on stores. Every stored product has a price and a number representing its stocks. Increments or decrements on those numbers are allowed only with pure values. Otherwise a type error must be detected. A suitable general function should have the following type signature:\\
 \texttt{SC P a -> String -> (a -> Store -> Store) -> SC P [Store] -> SC P [Store]}. \\
 The parameters have meanings as follows:
 \begin{enumerate}
