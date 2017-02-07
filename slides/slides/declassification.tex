@@ -1,12 +1,28 @@
 \begin{frame}{The SecureFlow module \newline Declassification}
 	\vspace{-3cm}
 	\begin{itemize}
-		\item Real-word applications release some information \\as part of their intended behavior
-		\item Declassification is a controlled way to leak information
+		\item Declassification is a controlled way to leak \\information
 		\item Type systems vs Functional combinator
 	\end{itemize}
 	\begin{textblock*}{2cm}(10.5cm,1.7cm)
 		\includegraphics[scale=0.2]{hatch}
 	\end{textblock*}
+	\begin{tikzpicture}[remember picture,overlay]
+	\node<2->[white,font=\fontsize{0.4cm}{0.5cm}\selectfont] at (1.8,-0.5) {Credential DB};
+	\node<2->[white,font=\fontsize{0.4cm}{0.5cm}\selectfont] at (1.9,-1) {(Private)};
+		
+	\node<3->[white,font=\fontsize{0.4cm}{0.5cm}\selectfont] at (8.5,-0.5) {Public ticket};
+	\node<3->[white,font=\fontsize{0.4cm}{0.5cm}\ttfamily\selectfont] at (8.5,-1) {open public credentials};
+	\draw<3-> [->,white,line width=1pt] (6.5,-0.75) -- (3.3,-0.75);
+	
+	\node<4->[white,font=\fontsize{0.25cm}{0.5cm}\selectfont] at (5,-0.5) {Compilation error};
+	
+	\node<5->[white,font=\fontsize{0.4cm}{0.5cm}\selectfont] at (7.5,-3) {Declassification function};
+	\node<5->[white,font=\fontsize{0.4cm}{0.5cm}\selectfont] at (7.5,-3.5) {Private $\rightarrow$ Public};
+	\node<5->[white,font=\fontsize{0.4cm}{0.5cm}\ttfamily\selectfont] at (7.5,-4) {declassifyWith \textit{HatchFunction} credentials};
+	\draw<5-> [->,white,line width=1pt] (6.5,-2.8) -- (3.3,-0.75);	
+
+	\node<6->[white,font=\fontsize{0.25cm}{0.5cm}\selectfont] at (4,-2) {Access allowed};
+	\end{tikzpicture}
 \end{frame}
 	
