@@ -35,6 +35,7 @@ open Ticket (SF a) = a
 up :: LEQ s s' => SecureFlow s a -> SecureFlow s' a
 up (SF a) = SF a
 
+-- Returns the second (more restrictive) Hatch version
 makeHatch :: (a -> b) -> Hatch' s l a b
 makeHatch f = pure $ pure f
 
@@ -46,5 +47,6 @@ declassifyWith :: (LEQ s k, LEQ s' s) => Hatch k a b -> SecureFlow s a -> Secure
 declassifyWith (SF f) s = unsafeCoerceLevels $ do x <- s
                                                   return $ f x
 
+-- Second version
 declassifyWith' :: (LEQ s k, LEQ s' s, LEQ l s', LEQ s' l) => Hatch' k l a b -> SecureFlow s a -> SecureFlow s' b
 declassifyWith' (SF sf) s = declassifyWith sf s

@@ -17,6 +17,9 @@ type instance (MustBePure P) = ()
 open :: MustBePure m => SecureComputation m a -> a
 open (SC a) = a
 
+-- | Simulation of Functor, Applicative and Monad instances. Due to type
+-- constraints on their signatures, SecureComputation may not be a Monad
+-- instance.
 smap :: (MustBePure m, MustBePure m') => (a -> b) -> SecureComputation m a
           -> SecureComputation m' b
 smap f (SC a) = SC $ f a

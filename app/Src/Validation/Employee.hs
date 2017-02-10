@@ -6,6 +6,8 @@ import Data.ByteString.Char8 (pack)
 import Data.List (partition)
 import Src.Model.Employee
 
+-- !Here there are some funcion to validate employees values.
+
 data EmployeeError =  Birthdate String | Name String | Email String | Salary String
                       deriving Show
 

@@ -5,8 +5,10 @@ import Security.Unsecure
 import Security.SecureComputation
 
 data TestIOError =  NegativeNumber | NonNumeric
-                deriving Show
+                    deriving Show
 
+-- | Constraints the String with some validation functions. A natural number must
+-- be a number and greater, or equal, to zero.
 getNat :: IO (Unsecure String TestIOError)
 getNat = do n <- getLine
             return $ upure n   [
@@ -18,6 +20,7 @@ getNat = do n <- getLine
                                           else Just NegativeNumber)
                                 ]
 
+-- | In this case the String is not constrainted, but it is marked as tainted.
 getUnpureNat :: IO (SecureComputation T String)
 getUnpureNat = do n <- getLine
                   return $ spure n

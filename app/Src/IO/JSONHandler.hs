@@ -1,6 +1,9 @@
 module Src.IO.JSONHandler (getEmployees, saveEmployees, getCredentials,
 getSecureEmployees, getStores) where
 
+-- | In this module there are some useful function for reading values from JSONHandler
+-- files. Those files are used as storage.
+
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
 import qualified Data.ByteString.Lazy as BSL

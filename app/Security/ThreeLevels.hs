@@ -21,5 +21,6 @@ low = Ticket
 medium :: Ticket Medium
 medium = Ticket
 
+-- Not exported
 high :: Ticket High
 high = Ticket
